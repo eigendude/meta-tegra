@@ -12,7 +12,7 @@ KERNEL_DISABLE_FW_USER_HELPER ?= "y"
 
 LINUX_VERSION ?= "5.15.148"
 PV = "${LINUX_VERSION}+git${SRCPV}"
-FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}-${@bb.parse.vars_from_file(d.getVar('FILE', False),d)[1]}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}-${@bb.parse.vars_from_file(d.getVar('FILE', False),d)[1]}:${THISDIR}/linux-yocto/tegra:"
 
 LINUX_VERSION_EXTENSION ?= "-l4t-r${@'.'.join(d.getVar('L4T_VERSION').split('.')[0:2])}-1012.12"
 SCMVERSION ??= "y"
@@ -27,6 +27,7 @@ SRC_URI = "git://${KERNEL_REPO};name=machine;branch=${KBRANCH} \
            ${@'file://disable-fw-user-helper.cfg' if d.getVar('KERNEL_DISABLE_FW_USER_HELPER') == 'y' else ''} \
            ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'file://systemd.cfg', '', d)} \
            file://disable-module-signing.cfg \
+           file://r8169.cfg \
 "
 
 KBUILD_DEFCONFIG = "defconfig"
